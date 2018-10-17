@@ -31,7 +31,11 @@ _jump_list() {
 
 _jump_set() {
   [ ! -d "${JUMP_FOLDER}" ] && mkdir "${JUMP_FOLDER}"
-  ln -s "${PWD}" "${JUMP_FOLDER}/$1"
+  [ -e "${JUMP_FOLDER}/$1" ] && {
+    (>&2 echo "Entry already exists: '$1' is linked to $(readlink ${JUMP_FOLDER}/$1)")
+    return 3
+  }
+  ln -ns "${PWD}" "${JUMP_FOLDER}/$1"
 }
 
 _jump_rm() {
