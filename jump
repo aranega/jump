@@ -31,11 +31,14 @@ _jump_list() {
 
 _jump_set() {
   [ ! -d "${JUMP_FOLDER}" ] && mkdir "${JUMP_FOLDER}"
-  [ -e "${JUMP_FOLDER}/$1" ] && {
-    (>&2 echo "Entry already exists: '$1' is linked to $(readlink ${JUMP_FOLDER}/$1)")
+  local link_name=$1
+  [ -z "${link_name}" ] && link_name="${PWD##*/}"
+  link_target=${JUMP_FOLDER}/${link_name}
+  [ -e "${link_target}" ] && {
+    (>&2 echo "Entry already exists: '${link_name}' is linked to $(readlink ${link_target})")
     return 3
   }
-  ln -ns "${PWD}" "${JUMP_FOLDER}/$1"
+  ln -ns "${PWD}" "${link_target}"
 }
 
 _jump_rm() {
