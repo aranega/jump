@@ -42,6 +42,10 @@ _jump_set() {
 }
 
 _jump_rm() {
+  [ -z "$1" ] && {
+    (>&2 echo "jump remove: no entry provided")
+    return 4
+  }
   [ ! -e "${JUMP_FOLDER}/$1" ] && {
     (>&2 echo "Entry $1 does not exist")
     return 2
